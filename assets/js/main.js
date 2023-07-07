@@ -1,4 +1,5 @@
 
+
 (function() {
   "use strict";
 
@@ -254,3 +255,9 @@
   new PureCounter();
 
 })()
+
+function displayMessage() {
+  var button = document.getElementById("Submitbutton");
+  button.innerHTML = "Message sent!";
+  button.clickable = false;
+}
