@@ -56,7 +56,7 @@
           <li><a href="#hero" class="nav-link scrollto active"><i class="bx bx-home"></i> <span>Home</span></a></li>
           <li><a href="#about" class="nav-link scrollto"><i class="bx bx-user"></i> <span>About</span></a></li>
           <li><a href="#resume" class="nav-link scrollto"><i class="bx bx-file-blank"></i> <span>Resume</span></a></li>
-          <!-- <li><a href="#services" class="nav-link scrollto"><i class="bx bx-server"></i> <span>More About me! </span></a></li> -->
+          <li><a href="#services" class="nav-link scrollto"><i class="bx bx-server"></i> <span>More About me! </span></a></li>
           <li><a href="#contact" class="nav-link scrollto"><i class="bx bx-envelope"></i> <span>Contact Me</span></a></li>
         </ul>
       </nav><!-- .nav-menu -->
@@ -94,7 +94,7 @@
             <div class="row">
               <div class="col-lg-6">
                 <ul>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Birthday:</strong> <span>6th December 2001</span></li>
+                  
                   <li><i class="bi bi-chevron-right"></i> <strong>Github:</strong> <span><a href="https://github.com/underdog-7k7" target="_blank">Click this!</a></span></li>
                   <li><i class="bi bi-chevron-right"></i> <strong>Phone:</strong> <span>+91 8002861754 (Primary)</span></li>
                   <li><i class="bi bi-chevron-right"></i> <strong>Current City:</strong> <span>Ranchi, Jharkhand</span></li>
@@ -103,7 +103,7 @@
               </div>
               <div class="col-lg-6">
                 <ul>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Age:</strong> <span>21</span></li>
+                  
                   <li><i class="bi bi-chevron-right"></i> <strong>Institute</strong> <span>Vellore Institute of Technology</span></li>
                   <li><i class="bi bi-chevron-right"></i> <strong>Freelance:</strong> <span>Available</span></li>
                   <li><i class="bi bi-chevron-right"></i> <strong>Qualifications</strong> <span>3rd Year UG Student</span></li>
@@ -267,7 +267,7 @@
 
         <div class="section-title">
           <h2>My Resume</h2>
-          <p>In the following section I have provided my Resume for Reference , if you need a Reference copy for the same , please click on the download button at the end of this very section</p>
+          <p>In the following section I have provided my Resume for Reference , if you need a Reference copy for the same , Please click on the download button at the end of this very section</p>
         </div>
 
         <div class="row">
@@ -362,8 +362,8 @@
               <h4>Certifications</h4>
               <h5>5th July, 2023</h5>
               <p><em>AWS Certified Cloud Practitioner</p>
-                <a href="assets/portfolio-download_reference/AWS Certified Cloud Practitioner certificate.pdf" download="AWS-Cert.pdf" class="custom-button" target="_blank">View Certificate</a>
-
+                <a href="assets/portfolio-download_reference/AWS Certified Cloud Practitioner certificate.pdf" class="button-link" target="_blank" >View Certificate</a>
+                
               
             </div>
             <div class="resume-item">
@@ -391,7 +391,7 @@
             
           </div>
         </div>
-        <a href="assets/portfolio-download_reference/Animesh's Resume.pdf" download="YourResume.pdf" style="display: inline-block; padding: 10px 20px; background-color: #fc0324; color: white; text-decoration: none; border-radius: 5px;" target="_blank">Download My Resume</a>
+        <a href="assets/portfolio-download_reference/Animesh's Resume.pdf" download="YourResume.pdf" class="button-link" target="_blank">Download My Resume</a>
       </div>
       
 
@@ -448,7 +448,7 @@
       <div class="container">
 
         <div class="section-title">
-          <h2>Contact</h2>
+          <h2>Contact Me!</h2>
           <p>Thank you for visiting my portfolio! I would love to hear from you and discuss any potential collaborations, projects, or opportunities. Please feel free to reach out to me using the contact information provided below. Whether you have a question, feedback, or just want to say hello, I'm always happy to connect with fellow enthusiasts and professionals in the industry. I will do my best to respond to your message as soon as possible. Looking forward to connecting with you!</p>
         </div>
 
@@ -475,7 +475,17 @@
                 </p>
               </div>
 
-              <iframe src="https://www.google.com/maps/place/23%C2%B020'02.8%22N+85%C2%B018'23.8%22E/@23.3418605,85.3010133,13.65z/data=!4m4!3m3!8m2!3d23.334121!4d85.306616?entry=ttu" frameborder="0" style="border:0; width: 100%; height: 290px;" allowfullscreen></iframe>
+              <div>
+                <div class="code-box">
+                  <h5 style="color: #fc0324;">Random Joke</h5> <!--v2.jokeapi.dev-->
+                <p>Because this space was looking empty 😐 </p>
+                  <div id="joke-container"></div>
+                  
+                  <div id="joke-button-container">
+                    <button id="joke-button" onclick="fetchJoke()">Get Joke</button>
+                  </div>
+                </div>
+              </div>
             </div>
 
           </div>
@@ -499,11 +509,6 @@
               <div class="form-group">
                 <label for="name">Type it out!</label>
                 <textarea class="form-control" name="message" rows="10" required></textarea>
-              </div>
-              <div class="my-3">
-                <div class="loading">Loading</div>
-                <div class="error-message"></div>
-                <div class="sent-message">Message Sent! I'll Get back to you!</div>
               </div>
               <div class="text-center"><button onclick="displayMessage()" type="submit"  id="Submitbutton">Hit me up!</button></div>
             </form>

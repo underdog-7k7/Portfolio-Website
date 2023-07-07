@@ -1104,17 +1104,50 @@ section {
 }
 
 /*Basic on hover for anchor*/
-.custom-button {
+
+.button-link {
   display: inline-block;
   padding: 10px 20px;
   background-color: #fc0324;
   color: white;
   text-decoration: none;
-  border-radius: 5px;
-  transition: filter 0.3s;
+  border: 2px solid #fc0324;
+  border-radius: 8px;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-.custom-button:hover {
-  filter: invert(100%);
+.button-link:hover {
+  background-color: white;
+  color: #fc0324;
+}
+
+.button-link:hover {
+  border-color: #fc0324;
+}
+
+#joke-container {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+#joke-button-container {
+  display: flex;
+  justify-content: center;
+}
+
+#joke-button {
+  background-color: #fc0324;
+  color: white;
+  border-radius: 8px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.code-box {
+  border: 2px solid #fc0324;
+  border-radius: 10px;
+  padding: 20px;
+  display: inline-block;
 }
 

@@ -261,3 +261,26 @@ function displayMessage() {
   button.innerHTML = "Message sent!";
   button.clickable = false;
 }
+
+function fetchJoke() {
+  var jokeContainer = document.getElementById("joke-container");
+  var jokeButton = document.getElementById("joke-button");
+
+  jokeButton.innerHTML = "Loading...";
+
+  fetch("https://v2.jokeapi.dev/joke/Any")
+    .then(response => response.json())
+    .then(data => {
+      if (data.type === "single") {
+        jokeContainer.innerHTML = data.joke;
+      } else if (data.type === "twopart") {
+        jokeContainer.innerHTML = data.setup + "<br>" + data.delivery;
+      }
+
+      jokeButton.innerHTML = "Another One";
+    })
+    .catch(error => {
+      console.log("Error:", error);
+      jokeButton.innerHTML = "Error";
+    });
+}
