@@ -268,7 +268,7 @@ function fetchJoke() {
 
   jokeButton.innerHTML = "Loading...";
 
-  fetch("https://v2.jokeapi.dev/joke/Any")
+  fetch("https://v2.jokeapi.dev/joke/Programming,Miscellaneous,Pun?blacklistFlags=nsfw,religious,political,racist,sexist,explicit")
     .then(response => response.json())
     .then(data => {
       if (data.type === "single") {
