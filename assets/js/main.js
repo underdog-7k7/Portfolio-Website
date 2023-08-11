@@ -284,3 +284,25 @@ function fetchJoke() {
       jokeButton.innerHTML = "Error";
     });
 }
+
+
+//email modularity
+function handleComposeEmailClick(event) {
+  event.preventDefault();
+
+  var recipientEmail = 'animesh.pandey2020@vitstudent.ac.in';
+  var subject = 'Subject';
+  var body = 'Body';
+
+  var mailtoLink = 'mailto:' + recipientEmail +
+                   '?subject=' + encodeURIComponent(subject) +
+                   '&body=' + encodeURIComponent(body);
+
+  window.open(mailtoLink, 'width=500,height=400');
+}
+
+var composeEmailLink = document.getElementById('composeEmailLink');
+composeEmailLink.addEventListener('click', handleComposeEmailClick);
+
+
+
