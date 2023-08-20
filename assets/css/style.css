@@ -854,7 +854,7 @@ section {
   float: left;
   width: 44px;
   height: 44px;
-  background: #dff3fc;
+  background: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1108,8 +1108,8 @@ section {
 .button-link {
   display: inline-block;
   padding: 10px 20px;
-  background-color: #fc0324;
-  color: white;
+  background-color:white ;
+  color: #fc0324;
   text-decoration: none;
   border: 2px solid #fc0324;
   border-radius: 8px;
@@ -1117,8 +1117,8 @@ section {
 }
 
 .button-link:hover {
-  background-color: white;
-  color: #fc0324;
+  background-color: #fc0324;
+  color:white ;
 }
 
 .button-link:hover {
@@ -1150,4 +1150,8 @@ section {
   padding: 20px;
   display: inline-block;
 }
+
+
+
+
 
