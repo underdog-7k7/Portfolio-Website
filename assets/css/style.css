@@ -1113,7 +1113,7 @@ section {
   text-decoration: none;
   border: 2px solid #fc0324;
   border-radius: 8px;
-  transition: background-color 0.3s, color 0.3s;
+  transition: background-color 0.5s, color 0.5s;
 }
 
 .button-link:hover {
