@@ -1,0 +1,49 @@
+{
+  "categories": [
+    {
+      "id": "languages",
+      "title": "Languages",
+      "prop": "bookshelf",
+      "blurb": "The books on this shelf I have actually read — cover to cover.",
+      "items": [
+        { "name": "Python", "level": 90, "note": "Primary — AI & backend daily driver" },
+        { "name": "Java", "level": 85, "note": "Primary — the long-time workhorse" },
+        { "name": "TypeScript / JavaScript", "level": 70, "note": "React frontends & tooling" },
+        { "name": "SQL", "level": 80, "note": "PostgreSQL dialect, query tuning" },
+        { "name": "Kotlin", "level": 65, "note": "From my Android days" },
+        { "name": "C", "level": 60, "note": "The first language I learned" }
+      ]
+    },
+    {
+      "id": "genai",
+      "title": "Generative & Agentic AI",
+      "prop": "workstation",
+      "blurb": "What actually runs on the big screen — my day job and my obsession.",
+      "items": [
+        { "name": "RAG Pipelines", "level": 90, "note": "End-to-end: ingest → embed → retrieve → generate" },
+        { "name": "LangChain / LangGraph", "level": 90, "note": "Agent workflow orchestration in production" },
+        { "name": "Vector Search", "level": 85, "note": "FAISS, ChromaDB, embedding pipelines" },
+        { "name": "Prompt Engineering", "level": 85, "note": "And knowing when it isn't enough" },
+        { "name": "MCP (Model Context Protocol)", "level": 80, "note": "Tool-connected agents" },
+        { "name": "LLM Internals", "level": 75, "note": "Architecture & fine-tuning fundamentals" },
+        { "name": "ML / DL Foundations", "level": 70, "note": "Scikit-learn, Pandas, NumPy" }
+      ]
+    },
+    {
+      "id": "backend",
+      "title": "Backend & Cloud",
+      "prop": "cabinet",
+      "blurb": "The toolbox that keeps the AI systems standing.",
+      "items": [
+        { "name": "FastAPI", "level": 90, "note": "Async APIs, Pydantic v2, OAuth 2.0" },
+        { "name": "PostgreSQL + SQLAlchemy", "level": 85, "note": "Aurora in prod, query optimisation" },
+        { "name": "Pytest", "level": 85, "note": "Cut client-reported bugs by ~80%" },
+        { "name": "AWS", "level": 80, "note": "Certified — EC2, EKS, S3, Aurora" },
+        { "name": "Docker & CI/CD", "level": 80, "note": "GitHub / GitLab pipelines, Jenkins" },
+        { "name": "GCP", "level": 75, "note": "Cloud Run, Compute Engine, Artifact Registry" },
+        { "name": "Django / Flask", "level": 75, "note": "When the job calls for them" },
+        { "name": "MongoDB / Firestore", "level": 70, "note": "Document stores for the right shapes" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "projects": [
+    {
+      "id": "vivek",
+      "title": "VIVEK",
+      "subtitle": "RAG over the Garuda Purāṇa",
+      "category": "GenAI · RAG · Vector Search",
+      "date": "Ongoing · Personal Project",
+      "description": "An end-to-end Retrieval-Augmented Generation platform for natural-language querying of the Garuda Purāṇa corpus. FAISS vector indexing with 1024-dim BAAI/bge-large-en-v1.5 embeddings, an in-memory model cache that eliminates cold-start overhead, and a Dockerised service on GCP Cloud Run scaling serverlessly.",
+      "tech": ["Python", "FastAPI", "FAISS", "HuggingFace", "Docker", "GCP Cloud Run", "React", "TypeScript"],
+      "image": "images/vivek.png"
+    },
+    {
+      "id": "agent-builder",
+      "title": "Agent Builder",
+      "subtitle": "Enterprise GenAI Platform · Tier-1 US Telecom",
+      "category": "Agentic AI · Backend",
+      "date": "Jan 2025 – Present · Incedo Inc.",
+      "description": "A scalable dual-service Agent Builder: a FastAPI + SQLAlchemy metadata service paired with a LangGraph execution engine that materialises agent workflows with dynamic tools. Redis checkpointers give agents stateful conversation recovery across nodes, and a full Pytest regression suite cut client-reported defects by ~80% (20–25 → 4–5 bugs per sprint).",
+      "tech": ["FastAPI", "LangGraph", "LangChain", "SQLAlchemy", "Redis", "PostgreSQL", "Pytest"],
+      "proprietary": true,
+      "image": "images/agent-builder.png"
+    },
+    {
+      "id": "clinical",
+      "title": "Clinical Trials Platform",
+      "subtitle": "Site Feasibility & Investigator Analytics",
+      "category": "Microservices · Data Platforms",
+      "date": "2024 · 6-month Global Biotech POC",
+      "description": "Owned delivery of site-feasibility modules, investigator landscape views and KPI dashboards inside a microservices architecture on AWS EKS. Co-designed the service decomposition and optimised PostgreSQL queries behind data-heavy investigator-landscape endpoints for faster analytics.",
+      "tech": ["FastAPI", "PostgreSQL", "AWS EC2 · EKS · S3", "React", "TypeScript"],
+      "proprietary": true,
+      "image": "images/clinical.png"
+    },
+    {
+      "id": "agrisecure",
+      "title": "AgriSecure",
+      "subtitle": "Smart-Contract Crop Insurance",
+      "category": "Android · Blockchain · IoT",
+      "date": "Jan – May 2024 · Capstone Project",
+      "description": "Tamper-proof agricultural insurance powered by blockchain. Field sensors and weather APIs stream temperature, humidity, soil moisture and rainfall onto the chain, while smart contracts automatically verify claims and trigger payouts. Farmers manage everything from a Kotlin + Jetpack Compose app.",
+      "tech": ["Kotlin", "Jetpack Compose", "BLE", "Truffle", "Ganache", "ESP-32", "Embedded C", "ThingSpeak"],
+      "github": "https://github.com/underdog-7k7/Agri-Secure-Insurance-",
+      "image": "images/agrisecure.png"
+    },
+    {
+      "id": "mineco",
+      "title": "MINECO",
+      "subtitle": "Miner Companion Smart Helmet",
+      "category": "IoT · Ad-Hoc Networks",
+      "date": "June 2023 · Personal Project",
+      "description": "A wearable safety helmet for miners that detects gas leaks (like carbon-monoxide pockets) and temperature spikes through an ad-hoc IoT sensor network — alerting the miner instantly and forwarding live data to an admin dashboard above ground.",
+      "tech": ["Arduino", "Gas Sensors", "Ad-Hoc Network", "IoT", "Embedded C"],
+      "github": "https://github.com/underdog-7k7/Miner-Companion--MINECO-Smart-Helmet",
+      "image": "images/mineco.png"
+    },
+    {
+      "id": "ars",
+      "title": "ARS Chatbot",
+      "subtitle": "Amazon Smart Review System",
+      "category": "Web Scraping · Machine Learning",
+      "date": "June 2023 · Internship @ SAIL",
+      "description": "A chatbot that reads and compares Amazon product reviews for you. Scrapes review data, runs it through ML models, and answers your questions about a product interactively — an early LLM-era build that pointed me toward GenAI.",
+      "tech": ["Python", "Web Scraping", "Machine Learning", "NLP"],
+      "github": "https://github.com/underdog-7k7/WebScraping-and-Product-Review-System-Using-Machine-Learning",
+      "image": "images/ars.png"
+    },
+    {
+      "id": "android",
+      "title": "Android Collection",
+      "subtitle": "Compose Apps & Games",
+      "category": "Android · Jetpack Compose",
+      "date": "4-month sprint · Personal + Codelabs",
+      "description": "A collection of native Android apps built with Kotlin and Jetpack Compose: CO-Trainer (BMI-based fitness & diet recommender), a Quotes app, a Superheroes video player, and the Unscramble word game from Google Codelabs.",
+      "tech": ["Kotlin", "Java", "Jetpack Compose", "Material 3"],
+      "github": "https://github.com/underdog-7k7/CO-Trainer-MobileApplication",
+      "extraLinks": [
+        { "label": "Quotes App", "url": "https://github.com/underdog-7k7/Quotes_App-using-Jetpack-Compose" },
+        { "label": "Superheroes Player", "url": "https://github.com/underdog-7k7/VideoPlayer-Superheros-Kotlin-JetpackCompose" },
+        { "label": "Unscramble Game", "url": "https://github.com/underdog-7k7/GoogleCodelabs-Unscramble-Game-JetpackCompose-Kotlin" }
+      ],
+      "image": "images/android.png"
+    }
+  ]
+}

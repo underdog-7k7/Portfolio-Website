@@ -1,0 +1,21 @@
+{
+  "name": "Animesh Pandey",
+  "roles": [
+    "an AI Engineer @ Incedo",
+    "an Agentic AI Developer",
+    "a RAG Systems Builder",
+    "a FastAPI Backend Engineer",
+    "an Android Dev in a past life",
+    "a Footballer & Gym Freak"
+  ],
+  "bio": "Software Development Engineer in Incedo's AI & Data division, Hyderabad. I build production GenAI systems — agentic workflows with LangGraph, RAG pipelines over vector stores, and the FastAPI backends that hold them up. B.Tech CSE from VIT Vellore; Android & IoT builder in a past life.",
+  "location": "Hyderabad, Telangana · India",
+  "email": "ompandey463@gmail.com",
+  "resume": "files/resume.pdf",
+  "socials": [
+    { "label": "GitHub", "url": "https://github.com/underdog-7k7" },
+    { "label": "LinkedIn", "url": "https://www.linkedin.com/in/animesh-pandey-26b282211/" },
+    { "label": "Google Dev", "url": "https://developers.google.com/profile/u/103085303199500136398" },
+    { "label": "Instagram", "url": "https://www.instagram.com/animesh___pandey/" }
+  ]
+}

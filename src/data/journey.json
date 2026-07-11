@@ -1,0 +1,60 @@
+{
+  "title": "The Journey So Far",
+  "stops": [
+    {
+      "year": "2020",
+      "title": "B.Tech CSE begins",
+      "org": "VIT Vellore",
+      "type": "education",
+      "detail": "Computer Science & Engineering at Vellore Institute of Technology. Graduated 2024 with a CGPA of 8.07 — after DPS Ranchi (95% in both X and XII, CBSE)."
+    },
+    {
+      "year": "2022",
+      "title": "Summer Intern · CNS Dept",
+      "org": "Airports Authority of India",
+      "type": "internship",
+      "detail": "Operational exposure to Communication, Navigation & Surveillance systems and the network infrastructure that keeps a major airport running."
+    },
+    {
+      "year": "2022–23",
+      "title": "Research Intern",
+      "org": "Samsung BRI",
+      "type": "internship",
+      "detail": "Co-developed a Log Score solution assessing log-volume impact from a codebase — awarded a Certificate of Excellence for it. (Aug 2022 – Feb 2023)"
+    },
+    {
+      "year": "2023",
+      "title": "Summer Intern · R&D Labs",
+      "org": "SAIL, RDCIS Ranchi",
+      "type": "internship",
+      "detail": "Smart Systems Lab at the R&D Centre for Iron & Steel. ML project 'APRIC' and my first hands-on exposure to LLMs and chatbots (GPT-2 era)."
+    },
+    {
+      "year": "2024",
+      "title": "Graduated + AgriSecure capstone",
+      "org": "VIT Vellore",
+      "type": "education",
+      "detail": "Shipped AgriSecure — blockchain-backed crop insurance with a Compose app and ESP-32 sensors — and closed out the B.Tech at CGPA 8.07."
+    },
+    {
+      "year": "2025",
+      "title": "SDE-1 · AI & Data",
+      "org": "Incedo Inc.",
+      "type": "work",
+      "detail": "Building an enterprise GenAI Agent Builder for a Tier-1 US telecom: FastAPI + SQLAlchemy metadata services, a LangGraph execution engine with dynamic tools, Redis-backed stateful agents, and a Pytest regression suite that cut client-reported defects by ~80%."
+    },
+    {
+      "year": "→",
+      "title": "Next stop",
+      "org": "Bigger agentic systems",
+      "type": "future",
+      "detail": "Deeper into LLM internals, MCP and production agent platforms — and an AI twin of me somewhere in this house."
+    }
+  ],
+  "certifications": [
+    { "name": "IBM Agentic AI Professional", "year": "2026" },
+    { "name": "GATE Qualified — Computer Science & Engineering", "year": "2025" },
+    { "name": "AWS Certified Cloud Practitioner", "year": "2023" },
+    { "name": "Certificate of Excellence — Samsung BRI", "year": "2023" }
+  ]
+}

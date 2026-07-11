@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #12100e;
+}
+
+canvas {
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}

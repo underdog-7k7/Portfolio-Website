@@ -1,0 +1,16 @@
+{
+  "formEndpoint": "https://getform.io/f/f519e5d9-c4a3-41d6-af21-823790766777",
+  "jokeApi": "https://v2.jokeapi.dev/joke/Programming,Pun?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&safe-mode",
+  "waypoints": [
+    { "id": "hall-entrance", "label": "Entrance", "position": [0, 0, 7.5], "neighbors": ["hall-center"] },
+    { "id": "hall-center", "label": "Hallway", "position": [0, 0, 4.5], "neighbors": ["hall-entrance", "hall-north", "living", "gallery"] },
+    { "id": "hall-north", "label": "Hall North", "position": [0, 0, 1.2], "neighbors": ["hall-center", "kitchen"] },
+    { "id": "living", "label": "Living Room", "position": [-6.5, 0, 4.5], "neighbors": ["hall-center", "living-west"] },
+    { "id": "living-west", "label": "Skills Corner", "position": [-9, 0, 4.5], "neighbors": ["living", "balcony"] },
+    { "id": "balcony", "label": "Balcony", "position": [-13.2, 0, 4.5], "neighbors": ["living-west"] },
+    { "id": "gallery", "label": "Project Gallery", "position": [6.5, 0, 4.5], "neighbors": ["hall-center", "gallery-north"] },
+    { "id": "gallery-north", "label": "Gallery North", "position": [6.5, 0, 1], "neighbors": ["gallery"] },
+    { "id": "kitchen", "label": "Kitchen", "position": [0, 0, -4], "neighbors": ["hall-north", "workshop"] },
+    { "id": "workshop", "label": "Workshop", "position": [-8.5, 0, -6.5], "neighbors": ["kitchen"] }
+  ]
+}
