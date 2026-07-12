@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { Text, useTexture } from '@react-three/drei'
+import { useTexture } from '@react-three/drei'
 import type { MeshBasicMaterial } from 'three'
 import projectsData from '../../data/projects.json'
 
@@ -47,9 +47,6 @@ export function TV({ position }: { position: [number, number, number] }) {
         <sphereGeometry args={[0.02, 8, 8]} />
         <meshStandardMaterial color="#e74c3c" emissive="#ff3b2e" emissiveIntensity={2} />
       </mesh>
-      <Text position={[0, 0.58, 0.11]} fontSize={0.12} color="#8d9aa8" anchorX="center">
-        ANIMESH·TV — CH 07 · PROJECTS
-      </Text>
 
       {/* media console below */}
       <group position={[0, 0, 0.28]}>

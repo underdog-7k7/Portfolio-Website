@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import { useAppStore } from '../store/useAppStore'
 import { ROOM_LABELS, type RoomId } from '../scene/houseLayout'
 import { useTypewriter } from './useTypewriter'
-import { tracks, trackName, useMusicStore } from '../audio/musicPlayer'
+import { nowPlayingLabel, useMusicStore } from '../audio/musicPlayer'
+import { RoomCard } from './RoomCard'
 import profile from '../data/profile.json'
 
 function HeroIntro({ isTouch }: { isTouch: boolean }) {
@@ -39,22 +40,23 @@ function FullscreenButton() {
       title={isFull ? 'Exit fullscreen' : 'Fullscreen'}
       className="pointer-events-auto rounded-full bg-black/45 px-3 py-1.5 text-xs text-cream/85 backdrop-blur transition hover:bg-black/65"
     >
-      {isFull ? '🗗 exit' : '⛶ fullscreen'}
+      {isFull ? '🗗 exit' : '⛶ Fullscreen F11 '}
     </button>
   )
 }
 
 function NowPlaying() {
   const playing = useMusicStore((s) => s.playing)
-  const index = useMusicStore((s) => s.index)
+  const source = useMusicStore((s) => s.source)
   const openOverlay = useAppStore((s) => s.openOverlay)
-  if (!playing || tracks.length === 0) return null
+  if (!playing || !source) return null
   return (
     <button
       onClick={() => openOverlay({ kind: 'jukebox' })}
       className="pointer-events-auto absolute bottom-4 right-4 max-w-[220px] truncate rounded-full bg-black/55 px-4 py-1.5 text-xs text-amberish backdrop-blur transition hover:bg-black/75"
     >
-      ♪ {trackName(tracks[index])}
+      {source.kind === 'radio' ? '📡 ' : '♪ '}
+      {nowPlayingLabel(source)}
     </button>
   )
 }
@@ -83,7 +85,7 @@ export function HUD() {
       {/* controls hint + fullscreen */}
       <div className="absolute right-4 top-4 flex items-center gap-2">
         <span className="hidden rounded-full bg-black/45 px-4 py-1.5 text-xs text-cream/75 backdrop-blur sm:block">
-          {isTouch ? 'tap circles · swipe to look' : 'WASD · mouse · E interact · Esc cursor'}
+          {isTouch ? 'tap circles · swipe to look' : 'WASD (Or Arrows) · Mouse(Look Around) · E interact · Esc cursor'}
         </span>
         <FullscreenButton />
       </div>
@@ -98,6 +100,7 @@ export function HUD() {
       )}
 
       <NowPlaying />
+      <RoomCard />
 
       {/* hero intro while standing in the hallway */}
       {room === 'hall' && !overlay && <HeroIntro isTouch={isTouch} />}

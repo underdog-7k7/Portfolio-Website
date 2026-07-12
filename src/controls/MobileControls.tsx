@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { useFrame, useThree, type ThreeEvent } from '@react-three/fiber'
-import { Billboard, Text } from '@react-three/drei'
+import { Billboard } from '@react-three/drei'
 import { Vector3, type Mesh } from 'three'
 import { player } from './playerState'
 import { EYE } from '../scene/houseLayout'
 import { syncRoom } from './syncRoom'
 import { useAppStore } from '../store/useAppStore'
+import { PillTag } from '../scene/props/Signage'
 import config from '../data/config.json'
 
 interface Waypoint {
@@ -89,10 +90,8 @@ function PortalDisc({ waypoint, onGo }: { waypoint: Waypoint; onGo: (id: string)
         <meshBasicMaterial transparent opacity={0} depthWrite={false} />
       </mesh>
       {major && (
-        <Billboard position={[0, 0.75, 0]}>
-          <Text fontSize={0.2} color="#d9fff8" outlineWidth={0.008} outlineColor="#0b3a33" anchorX="center">
-            {waypoint.label}
-          </Text>
+        <Billboard position={[0, 0.78, 0]}>
+          <PillTag text={waypoint.label} />
         </Billboard>
       )}
     </group>

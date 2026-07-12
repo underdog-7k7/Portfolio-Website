@@ -1,16 +1,36 @@
 import { useMemo } from 'react'
 import { CanvasTexture, SRGBColorSpace } from 'three'
 import journey from '../../data/journey.json'
+import { chalkText, chalkLine, chalkRect, chalkCheck, chalkErode, chalkSmudges, seedChalk, CHALK_FONT } from '../chalk'
 
-const TYPE_COLORS: Record<string, string> = {
-  education: '#3fa7ff',
-  internship: '#ffb454',
-  work: '#58e08a',
-  future: '#c792ea',
+const WHITE = '#eceae2'
+const YELLOW = '#f2e3a4'
+const FADED = 'rgba(236,234,226,0.68)'
+
+/** word-wrap for chalk lines, honouring the handwriting font metrics */
+function wrapChalk(ctx: CanvasRenderingContext2D, text: string, size: number, maxWidth: number): string[] {
+  ctx.font = `${size}px ${CHALK_FONT}`
+  const words = text.split(' ')
+  const lines: string[] = []
+  let line = ''
+  for (const word of words) {
+    const probe = line ? `${line} ${word}` : word
+    if (ctx.measureText(probe).width > maxWidth && line) {
+      lines.push(line)
+      line = word
+    } else line = probe
+  }
+  if (line) lines.push(line)
+  return lines
 }
 
-/** metro-map texture drawn from journey.json — edit the JSON, the wall updates */
-function makeJourneyMap(): CanvasTexture {
+/**
+ * Classroom chalkboard drawn from journey.json — milestones on the left,
+ * certifications on the right, today's date chalked in the corner. All
+ * "handwriting" comes from the chalk toolkit (per-glyph wobble + dry-edge
+ * ghost pass + grain erosion) so it reads like real chalk yet stays legible.
+ */
+function makeChalkboard(): CanvasTexture {
   const W = 1280
   const H = 800
   const c = document.createElement('canvas')
@@ -18,125 +38,149 @@ function makeJourneyMap(): CanvasTexture {
   c.height = H
   const ctx = c.getContext('2d')!
 
-  ctx.fillStyle = '#101826'
+  // slate with a soft top-light and vignette
+  const bg = ctx.createLinearGradient(0, 0, 0, H)
+  bg.addColorStop(0, '#242c29')
+  bg.addColorStop(1, '#181f1d')
+  ctx.fillStyle = bg
   ctx.fillRect(0, 0, W, H)
-  // subtle dot grid
-  ctx.fillStyle = 'rgba(255,255,255,0.045)'
-  for (let x = 30; x < W; x += 46) for (let y = 30; y < H; y += 46) ctx.fillRect(x, y, 2.5, 2.5)
+  const vin = ctx.createRadialGradient(W / 2, H / 2, H / 3, W / 2, H / 2, W * 0.72)
+  vin.addColorStop(0, 'rgba(0,0,0,0)')
+  vin.addColorStop(1, 'rgba(0,0,0,0.32)')
+  ctx.fillStyle = vin
+  ctx.fillRect(0, 0, W, H)
+  seedChalk(17)
+  chalkSmudges(ctx, W, H, 9)
+  // dust haze settling above the tray
+  const dust = ctx.createLinearGradient(0, H - 70, 0, H)
+  dust.addColorStop(0, 'rgba(235,235,225,0)')
+  dust.addColorStop(1, 'rgba(235,235,225,0.06)')
+  ctx.fillStyle = dust
+  ctx.fillRect(0, H - 70, W, 70)
 
-  // title
-  ctx.fillStyle = '#ffb454'
-  ctx.font = 'bold 52px "Segoe UI", sans-serif'
-  ctx.fillText(journey.title.toUpperCase(), 64, 96)
-  ctx.fillStyle = 'rgba(255,255,255,0.45)'
-  ctx.font = '24px "Segoe UI", sans-serif'
-  ctx.fillText('internships → full-time · the line keeps going', 66, 136)
+  // ---- chalk writing happens on a transparent layer so the grain erosion
+  //      only eats the strokes, never the slate ----
+  const layer = document.createElement('canvas')
+  layer.width = W
+  layer.height = H
+  const lc = layer.getContext('2d')!
+  seedChalk(7)
 
+  // title + wavy underline
+  const titleW = chalkText(lc, journey.title, 64, 96, 62, { color: WHITE })
+  chalkLine(lc, 64, 120, 64 + titleW, 126, { width: 4, alpha: 0.7 })
+  chalkLine(lc, 64, 130, 64 + titleW * 0.55, 134, { width: 3, alpha: 0.4 })
+
+  // classroom date, top-right corner
+  const today = new Date().toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' })
+  chalkText(lc, 'today:', W - 64, 62, 26, { align: 'right', color: YELLOW, alpha: 0.85 })
+  const dateW = chalkText(lc, today, W - 64, 104, 34, { align: 'right', color: WHITE })
+  chalkLine(lc, W - 64 - dateW, 122, W - 64, 126, { width: 3, alpha: 0.5 })
+
+  // ---- left column: the milestones ----
   const stops = journey.stops
-  const n = stops.length
-  const x0 = 100
-  const x1 = W - 110
-  const yTop = 340
-  const yBot = 560
-  const pts = stops.map((_, i) => ({
-    x: x0 + (i * (x1 - x0)) / (n - 1),
-    y: i % 2 === 0 ? yTop : yBot,
-  }))
+  let y = 196
+  for (const s of stops) {
+    chalkText(lc, s.year, 64, y, 30, { color: YELLOW, maxWidth: 128 })
+    chalkText(lc, s.title, 206, y, 33, { color: WHITE, maxWidth: 424 })
+    chalkText(lc, s.org, 206, y + 33, 24, { color: FADED, maxWidth: 400 })
+    // little chalk tick connecting year to entry
+    chalkLine(lc, 178, y - 8, 194, y - 8, { alpha: 0.35, width: 2.5 })
+    y += 77
+  }
 
-  // metro line
-  ctx.strokeStyle = '#ffb454'
-  ctx.lineWidth = 11
-  ctx.lineJoin = 'round'
-  ctx.lineCap = 'round'
-  ctx.beginPath()
-  pts.forEach((p, i) => (i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y)))
-  // terminus arrow
-  const last = pts[n - 1]
-  ctx.lineTo(last.x + 42, last.y)
-  ctx.stroke()
-  ctx.beginPath()
-  ctx.moveTo(last.x + 42, last.y - 16)
-  ctx.lineTo(last.x + 66, last.y)
-  ctx.lineTo(last.x + 42, last.y + 16)
-  ctx.stroke()
+  // vertical divider between columns
+  chalkLine(lc, 672, 184, 676, 700, { alpha: 0.28, width: 3 })
 
-  // stations + labels
-  stops.forEach((s, i) => {
-    const { x, y } = pts[i]
-    ctx.fillStyle = '#f5f2ea'
-    ctx.beginPath()
-    ctx.arc(x, y, 19, 0, Math.PI * 2)
-    ctx.fill()
-    ctx.fillStyle = TYPE_COLORS[s.type] ?? '#fff'
-    ctx.beginPath()
-    ctx.arc(x, y, 11, 0, Math.PI * 2)
-    ctx.fill()
+  // ---- right column: certifications & achievements ----
+  const cx = 712
+  const headW = chalkText(lc, 'Certifications', cx, 208, 42, { color: YELLOW })
+  chalkLine(lc, cx, 230, cx + headW, 236, { width: 4, alpha: 0.65 })
+  // chalk star doodle beside the header
+  const sx = cx + headW + 42
+  for (const [a, b, cD, d] of [
+    [sx - 14, 196, sx + 14, 212],
+    [sx + 14, 196, sx - 14, 212],
+    [sx, 190, sx, 218],
+    [sx - 17, 204, sx + 17, 204],
+  ] as const) {
+    chalkLine(lc, a, b, cD, d, { color: YELLOW, alpha: 0.7, width: 2.5 })
+  }
 
-    const above = y === yTop
-    const dir = above ? -1 : 1
-    ctx.textAlign = 'center'
-    ctx.fillStyle = '#ffd9a8'
-    ctx.font = 'bold 30px "Segoe UI", sans-serif'
-    ctx.fillText(s.year, x, y + dir * (above ? 48 : 64))
-    ctx.fillStyle = '#f0ede4'
-    ctx.font = 'bold 21px "Segoe UI", sans-serif'
-    ctx.fillText(s.title, x, y + dir * (above ? 84 : 96), 200)
-    ctx.fillStyle = 'rgba(255,255,255,0.55)'
-    ctx.font = '19px "Segoe UI", sans-serif'
-    ctx.fillText(s.org, x, y + dir * (above ? 112 : 124), 200)
-    ctx.textAlign = 'left'
-  })
+  let cy = 292
+  for (const cert of journey.certifications) {
+    chalkCheck(lc, cx + 4, cy - 12, 13)
+    const lines = wrapChalk(lc, cert.name, 27, 420)
+    lines.forEach((ln, i) => {
+      chalkText(lc, ln, cx + 44, cy + i * 33, 27, { color: WHITE })
+    })
+    chalkText(lc, `'${cert.year.slice(-2)}`, W - 70, cy, 26, { align: 'right', color: YELLOW, alpha: 0.9 })
+    cy += lines.length * 33 + 42
+  }
 
-  // legend
-  const legend: Array<[string, string]> = [
-    ['education', 'Education'],
-    ['internship', 'Internship'],
-    ['work', 'Full-time'],
-    ['future', 'Next'],
-  ]
-  let lx = 66
-  legend.forEach(([type, label]) => {
-    ctx.fillStyle = TYPE_COLORS[type]
-    ctx.beginPath()
-    ctx.arc(lx, H - 62, 10, 0, Math.PI * 2)
-    ctx.fill()
-    ctx.fillStyle = 'rgba(255,255,255,0.65)'
-    ctx.font = '22px "Segoe UI", sans-serif'
-    ctx.fillText(label, lx + 20, H - 54)
-    lx += 40 + ctx.measureText(label).width + 44
-  })
-  ctx.fillStyle = 'rgba(255,255,255,0.35)'
-  ctx.font = 'italic 20px "Segoe UI", sans-serif'
-  ctx.textAlign = 'right'
-  ctx.fillText('walk closer for the full story →', W - 66, H - 54)
-  ctx.textAlign = 'left'
+  // bottom band: hint on the left, DO-NOT-ERASE box on the right
+  chalkLine(lc, 64, 716, W - 64, 720, { alpha: 0.22, width: 3 })
+  chalkText(lc, 'step closer for the full story →', 64, 762, 27, { color: FADED })
+  lc.save()
+  lc.translate(1080, 748)
+  lc.rotate(-0.035)
+  chalkRect(lc, -132, -34, 264, 56, { color: YELLOW, alpha: 0.8, width: 3.5 })
+  chalkText(lc, 'DO NOT ERASE !', 0, 6, 28, { align: 'center', color: YELLOW })
+  lc.restore()
+
+  chalkErode(lc, W, H, 3200)
+  ctx.drawImage(layer, 0, 0)
 
   const t = new CanvasTexture(c)
   t.colorSpace = SRGBColorSpace
-  t.anisotropy = 4
+  t.anisotropy = 8
   return t
 }
 
-/** big framed "metro map" of my career on the gallery wall */
+/** wood-framed classroom chalkboard with chalk tray, sticks and an eraser */
 export function JourneyBoard({ position, rotationY = 0 }: { position: [number, number, number]; rotationY?: number }) {
-  const map = useMemo(() => makeJourneyMap(), [])
+  const board = useMemo(() => makeChalkboard(), [])
   return (
     <group position={position} rotation-y={rotationY}>
+      {/* frame */}
       <mesh position={[0, 0, -0.03]}>
-        <boxGeometry args={[3.8, 2.42, 0.08]} />
-        <meshStandardMaterial color="#3a2a1c" roughness={0.5} />
+        <boxGeometry args={[3.85, 2.46, 0.08]} />
+        <meshStandardMaterial color="#4a3524" roughness={0.65} />
       </mesh>
+      {/* slate */}
       <mesh position={[0, 0, 0.012]}>
         <planeGeometry args={[3.6, 2.25]} />
-        <meshStandardMaterial map={map} roughness={0.6} />
+        <meshStandardMaterial map={board} roughness={0.9} />
       </mesh>
-      {/* picture lights */}
-      {[-1.1, 1.1].map((x) => (
-        <mesh key={x} position={[x, 1.32, 0.1]} rotation-x={0.6}>
-          <cylinderGeometry args={[0.03, 0.05, 0.32, 8]} />
-          <meshStandardMaterial color="#c8a248" metalness={0.6} />
+      {/* chalk tray */}
+      <mesh position={[0, -1.27, 0.07]}>
+        <boxGeometry args={[1.8, 0.05, 0.14]} />
+        <meshStandardMaterial color="#5a4130" roughness={0.7} />
+      </mesh>
+      <mesh position={[0, -1.24, 0.135]}>
+        <boxGeometry args={[1.8, 0.035, 0.02]} />
+        <meshStandardMaterial color="#4a3524" roughness={0.7} />
+      </mesh>
+      {/* chalk sticks */}
+      <mesh position={[-0.35, -1.235, 0.08]} rotation-z={Math.PI / 2} rotation-x={0.15}>
+        <cylinderGeometry args={[0.013, 0.013, 0.1, 8]} />
+        <meshStandardMaterial color="#eceae2" roughness={1} />
+      </mesh>
+      <mesh position={[-0.14, -1.235, 0.1]} rotation-z={Math.PI / 2} rotation-y={0.4}>
+        <cylinderGeometry args={[0.013, 0.013, 0.08, 8]} />
+        <meshStandardMaterial color="#f2e3a4" roughness={1} />
+      </mesh>
+      {/* eraser: wood back + felt */}
+      <group position={[0.42, -1.225, 0.08]} rotation-y={-0.2}>
+        <mesh position={[0, 0.015, 0]}>
+          <boxGeometry args={[0.17, 0.035, 0.07]} />
+          <meshStandardMaterial color="#8a6d4a" roughness={0.8} />
         </mesh>
-      ))}
+        <mesh position={[0, -0.012, 0]}>
+          <boxGeometry args={[0.17, 0.022, 0.07]} />
+          <meshStandardMaterial color="#3b4045" roughness={1} />
+        </mesh>
+      </group>
     </group>
   )
 }

@@ -1,35 +1,77 @@
+import { useMemo } from 'react'
+import { CanvasTexture, SRGBColorSpace } from 'three'
 import { Interactable } from '../../interactions/Interactable'
 import { Sofa, CoffeeTable, Bookshelf, Workstation, Cabinet, FloorLamp, CeilingLamp, WallArt, Jukebox } from '../props/props'
+import { HoloProjector } from '../props/HoloProjector'
+import { getRepos, timeAgo } from '../../services/github'
 import skills from '../../data/skills.json'
 
 /**
- * Each skills category from skills.json is bound to a piece of furniture via
- * its `prop` field — add a category to the JSON and give it a slot here and
- * both the 3D room and the overlay update together.
+ * The living room. Skills moved off the furniture onto the holographic
+ * constellation; the workstation monitor now mirrors my real GitHub (its
+ * texture redraws when the API answers) and the coffee table hides a card
+ * trick. Bookshelf & cabinet stay as cozy decor.
  */
-const SLOTS: Record<string, { position: [number, number, number]; rotationY: number; markerY: number }> = {
-  bookshelf: { position: [-10.6, 0, 1.8], rotationY: 0, markerY: 2.5 },
-  workstation: { position: [-7, 0, 0.65], rotationY: 0, markerY: 2.1 },
-  cabinet: { position: [-5, 0, 8.45], rotationY: Math.PI, markerY: 1.8 },
-}
 
-const PROPS: Record<string, (p: { position: [number, number, number]; rotationY?: number }) => JSX.Element> = {
-  bookshelf: Bookshelf,
-  workstation: Workstation,
-  cabinet: Cabinet,
+/** terminal-style monitor texture that fills with real repo names */
+function useGitHubScreen(): CanvasTexture {
+  return useMemo(() => {
+    const c = document.createElement('canvas')
+    c.width = 256
+    c.height = 160
+    const ctx = c.getContext('2d')!
+    const draw = (repos: Awaited<ReturnType<typeof getRepos>>) => {
+      ctx.fillStyle = '#0d1420'
+      ctx.fillRect(0, 0, 256, 160)
+      ctx.font = 'bold 11px monospace'
+      ctx.fillStyle = '#58e08a'
+      ctx.fillText('$ gh repo list --sort pushed', 8, 16)
+      if (!repos) {
+        ctx.fillStyle = '#7d8799'
+        ctx.fillText('fetching…', 8, 36)
+      } else {
+        repos.slice(0, 6).forEach((r, i) => {
+          const y = 36 + i * 20
+          ctx.fillStyle = '#ffcb6b'
+          ctx.fillText(r.name.slice(0, 20), 8, y)
+          ctx.fillStyle = '#7d8799'
+          ctx.font = '10px monospace'
+          ctx.fillText(timeAgo(r.pushedAt), 178, y)
+          ctx.font = 'bold 11px monospace'
+        })
+        ctx.fillStyle = '#58e08a'
+        ctx.fillText('$ █', 8, 36 + Math.min(repos.length, 6) * 20)
+      }
+    }
+    draw(null)
+    const t = new CanvasTexture(c)
+    t.colorSpace = SRGBColorSpace
+    void getRepos().then((rs) => {
+      draw(rs)
+      t.needsUpdate = true
+    })
+    return t
+  }, [])
 }
 
 export function LivingRoom() {
+  const ghScreen = useGitHubScreen()
   return (
     <group>
       <CeilingLamp position={[-7, 2.85, 4.5]} intensity={22} distance={13} />
-      <Sofa position={[-7.5, 0, 6]} rotationY={Math.PI} />
+      {/* sofa faces the coffee table / room, not the wall */}
+      <Sofa position={[-7.5, 0, 6]} rotationY={0} />
       <CoffeeTable position={[-7.5, 0, 4.4]} />
-      <FloorLamp position={[-10.4, 0, 8.3]} />
+      {/* east corner — out of the hologram's projection */}
+      <FloorLamp position={[-3.2, 0, 8.2]} />
       <WallArt position={[-7.5, 1.95, 8.84]} rotationY={Math.PI} w={1.5} h={1.1} />
       <WallArt position={[-9.6, 1.9, 0.16]} rotationY={0} w={1.0} h={0.8} />
 
-      {/* jukebox against the north wall — the house soundtrack */}
+      {/* cozy decor (used to carry the skills panels) */}
+      <Bookshelf position={[-10.6, 0, 1.8]} rotationY={0} />
+      <Cabinet position={[-5, 0, 8.45]} rotationY={Math.PI} />
+
+      {/* jukebox against the north wall — live radio + local tapes */}
       <Interactable
         id="jukebox"
         position={[-4.6, 0, 0.6]}
@@ -43,25 +85,32 @@ export function LivingRoom() {
         <Jukebox position={[0, 0, 0]} />
       </Interactable>
 
-      {skills.categories.map((cat) => {
-        const slot = SLOTS[cat.prop]
-        const Prop = PROPS[cat.prop]
-        if (!slot || !Prop) return null
-        return (
-          <Interactable
-            key={cat.id}
-            id={`skills-${cat.id}`}
-            position={slot.position}
-            radius={2.1}
-            label={cat.title}
-            overlay={{ kind: 'skills', categoryId: cat.id }}
-            markerY={slot.markerY}
-            room="living"
-          >
-            <Prop position={[0, 0, 0]} rotationY={slot.rotationY} />
-          </Interactable>
-        )
-      })}
+      {/* the workstation streams my real GitHub activity */}
+      <Interactable
+        id="github-live"
+        position={[-7, 0, 0.65]}
+        radius={2.1}
+        label="See what I'm coding lately"
+        overlay={{ kind: 'github' }}
+        markerY={2.1}
+        room="living"
+      >
+        <Workstation position={[0, 0, 0]} rotationY={0} screen={ghScreen} />
+      </Interactable>
+
+      {/* the skills constellation — SW corner, with room to breathe */}
+      <Interactable
+        id="skill-holo"
+        position={[-9.6, 0, 7.2]}
+        radius={2.8}
+        label="Explore the skill constellation"
+        overlay={{ kind: 'skills', categoryId: skills.categories[0].id }}
+        proximity={false}
+        markerY={3.0}
+        room="living"
+      >
+        <HoloProjector position={[0, 0, 0]} />
+      </Interactable>
     </group>
   )
 }

@@ -1,8 +1,9 @@
 import { useEffect, useRef } from 'react'
-import { useAnimations, useGLTF, Billboard, Text } from '@react-three/drei'
+import { useAnimations, useGLTF, Billboard } from '@react-three/drei'
 import { LoopOnce } from 'three'
 import type { Group } from 'three'
 import { useAppStore } from '../../store/useAppStore'
+import { SpeechBubble } from './Signage'
 
 const URL = import.meta.env.BASE_URL + 'models/robot.glb'
 
@@ -51,10 +52,8 @@ export function RobotAvatar({ position, rotationY = 0 }: { position: [number, nu
       <group ref={rig} rotation-y={rotationY} scale={0.36}>
         <primitive object={scene} />
       </group>
-      <Billboard position={[0, 2.15, 0]}>
-        <Text fontSize={0.13} color="#ffd9a8" outlineWidth={0.006} outlineColor="#3a2a1c" anchorX="center">
-          Beep! I'm Animesh's AI twin
-        </Text>
+      <Billboard position={[0, 2.28, 0]}>
+        <SpeechBubble title="online · beep!" line="I'm Animesh's AI twin — say hi" />
       </Billboard>
     </group>
   )

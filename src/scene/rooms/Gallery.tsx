@@ -21,7 +21,7 @@ export function Gallery() {
         id="projects-tv"
         position={[6.5, 0, 0.6]}
         radius={3.8}
-        label="Turn on ANIMESH·TV"
+        label="View My Projects"
         overlay={{ kind: 'tv' }}
         proximity={false}
         markerY={0}
@@ -37,12 +37,12 @@ export function Gallery() {
         <TV position={[0, 0, -0.38]} />
       </Interactable>
 
-      {/* career metro map on the east wall — proximity opens the full story */}
+      {/* classroom chalkboard on the east wall — proximity opens the full story */}
       <Interactable
         id="journey-board"
         position={[10.8, 0, 4]}
         radius={2.7}
-        label="My journey"
+        label="Read my journey board"
         overlay={{ kind: 'journey' }}
         markerY={0}
         room="gallery"

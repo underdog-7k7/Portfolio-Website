@@ -5,7 +5,7 @@ import config from '../data/config.json'
 
 type Status = 'idle' | 'sending' | 'sent' | 'error'
 
-/** contact form styled as a recipe card — posts to Getform (static-host friendly) */
+/** contact form styled as a note pinned to the kitchen corkboard — posts to Getform (static-host friendly) */
 export function ContactCard({ Panel }: { Panel: PanelComponent }) {
   const [status, setStatus] = useState<Status>('idle')
 
@@ -32,13 +32,16 @@ export function ContactCard({ Panel }: { Panel: PanelComponent }) {
     'w-full rounded-lg border border-ink/20 bg-white/70 px-3 py-2 text-sm text-ink placeholder-ink/35 outline-none focus:border-amberish'
 
   return (
-    <Panel title="Let's Cook Something Together">
-      <div className="rounded-2xl border-2 border-dashed border-ink/25 bg-cream p-4 text-ink">
-        <p className="mb-1 font-display text-sm font-bold">📇 Recipe: A Great Collaboration</p>
-        <p className="mb-3 text-xs text-ink/60">Prep time: 1 min · Serves: the both of us</p>
+    <Panel title="📮 Drop Me a Message">
+      <p className="mb-3 text-sm text-cream/70">
+        Pin a note on my board, a question, a collab, or just a hello. It lands straight in my inbox.
+      </p>
+      <div className="relative rounded-2xl bg-cream p-4 pt-5 text-ink shadow-[4px_6px_0_rgba(0,0,0,0.25)]" style={{ transform: 'rotate(-0.6deg)' }}>
+        {/* push pin */}
+        <span className="absolute left-1/2 top-2 h-3.5 w-3.5 -translate-x-1/2 rounded-full bg-red-600 shadow-[0_2px_3px_rgba(0,0,0,0.4)]" />
         <form onSubmit={submit} className="space-y-3">
           <div>
-            <span className={label}>I'll need your name</span>
+            <span className={label}>Your name</span>
             <input name="name" required placeholder="Jane Developer" className={field} />
           </div>
           <div>
@@ -46,19 +49,19 @@ export function ContactCard({ Panel }: { Panel: PanelComponent }) {
             <input name="email" type="email" required placeholder="jane@dev.io" className={field} />
           </div>
           <div>
-            <span className={label}>Instructions — your message</span>
-            <textarea name="message" required rows={3} placeholder="Mix ideas thoroughly, ship at 200°C…" className={field} />
+            <span className={label}>The note</span>
+            <textarea name="message" required rows={3} placeholder="Hey Animesh, let's talk about…" className={field} />
           </div>
           <button
             type="submit"
             disabled={status === 'sending'}
             className="w-full rounded-lg bg-ink py-2.5 font-display text-sm font-bold text-cream transition hover:bg-ink/85 disabled:opacity-50"
           >
-            {status === 'sending' ? 'Sending…' : status === 'sent' ? 'Sent! I’ll get back to you 🍽️' : 'Send it to the kitchen 🍳'}
+            {status === 'sending' ? 'Pinning…' : status === 'sent' ? 'Pinned! I’ll get back to you 📮' : 'Pin it to the board 📌'}
           </button>
           {status === 'error' && (
             <p className="text-xs text-red-700">
-              Hmm, the oven timer failed. Email me directly instead:{' '}
+              The pin broke. Email me directly instead:{' '}
               <a className="underline" href={`mailto:${profile.email}`}>
                 {profile.email}
               </a>
@@ -67,7 +70,7 @@ export function ContactCard({ Panel }: { Panel: PanelComponent }) {
         </form>
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center gap-2">
+      {/* <div className="mt-4 flex flex-wrap items-center gap-2">
         <a
           href={import.meta.env.BASE_URL + profile.resume}
           target="_blank"
@@ -81,7 +84,7 @@ export function ContactCard({ Panel }: { Panel: PanelComponent }) {
             {s.label} ↗
           </a>
         ))}
-      </div>
+      </div> */}
       <p className="mt-3 text-center text-[11px] text-cream/45">{profile.location}</p>
     </Panel>
   )

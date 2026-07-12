@@ -3,7 +3,6 @@ import { useAppStore } from '../store/useAppStore'
 import { SkillsPanel } from './SkillsPanel'
 import { ProjectPanel } from './ProjectPanel'
 import { ContactCard } from './ContactCard'
-import { JokeToast } from './JokeToast'
 import { JukeboxPanel } from './JukeboxPanel'
 import { AgentPanel } from './AgentPanel'
 import { IdeaPanel } from './IdeaPanel'
@@ -11,6 +10,12 @@ import { LaptopScreen } from './LaptopScreen'
 import { TVCarousel } from './TVCarousel'
 import { CurrentWorkPanel } from './CurrentWorkPanel'
 import { JourneyPanel } from './JourneyPanel'
+import { TelescopePanel } from './TelescopePanel'
+import { ArcadePanel } from './ArcadePanel'
+import { GitHubPanel } from './GitHubPanel'
+import { FortuneToast } from './FortuneToast'
+import { CardTrickPanel } from './CardTrickPanel'
+import { ChaiToast } from './ChaiToast'
 
 /**
  * Panel shell. Layout is viewport-driven: an invisible flex container fills
@@ -50,8 +55,6 @@ export function OverlayRoot() {
       return <ProjectPanel projectId={overlay.projectId} Panel={Panel} />
     case 'contact':
       return <ContactCard Panel={Panel} />
-    case 'joke':
-      return <JokeToast />
     case 'jukebox':
       return <JukeboxPanel Panel={Panel} />
     case 'agent':
@@ -66,6 +69,18 @@ export function OverlayRoot() {
       return <CurrentWorkPanel Panel={Panel} />
     case 'journey':
       return <JourneyPanel Panel={Panel} />
+    case 'telescope':
+      return <TelescopePanel />
+    case 'trivia':
+      return <ArcadePanel Panel={Panel} />
+    case 'github':
+      return <GitHubPanel Panel={Panel} />
+    case 'fortune':
+      return <FortuneToast />
+    case 'cards':
+      return <CardTrickPanel Panel={Panel} />
+    case 'joke':
+      return <ChaiToast />
   }
 }
 

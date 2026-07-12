@@ -4,7 +4,6 @@ export type Overlay =
   | { kind: 'skills'; categoryId: string }
   | { kind: 'project'; projectId: string }
   | { kind: 'contact' }
-  | { kind: 'joke' }
   | { kind: 'jukebox' }
   | { kind: 'agent' }
   | { kind: 'idea' }
@@ -12,13 +11,33 @@ export type Overlay =
   | { kind: 'tv' }
   | { kind: 'current' }
   | { kind: 'journey' }
+  | { kind: 'telescope' }
+  | { kind: 'trivia' }
+  | { kind: 'github' }
+  | { kind: 'fortune' }
+  | { kind: 'cards' }
+  | { kind: 'joke' }
 
 /** overlays that need a free cursor (forms, buttons, links) */
-const NEEDS_CURSOR: Overlay['kind'][] = ['contact', 'joke', 'jukebox', 'agent', 'idea', 'laptop', 'tv', 'current']
+const NEEDS_CURSOR: Overlay['kind'][] = [
+  'contact',
+  'jukebox',
+  'agent',
+  'idea',
+  'laptop',
+  'tv',
+  'current',
+  'telescope',
+  'trivia',
+  'github',
+  'fortune',
+  'cards',
+  'joke',
+]
 /** overlays tied to a camera focus — closing them flies the camera back */
 const FOCUS_KINDS: Overlay['kind'][] = ['laptop', 'tv']
 /** overlays with text inputs — WASD must not move the player while typing */
-export const TYPING_KINDS: Overlay['kind'][] = ['contact', 'agent', 'idea']
+export const TYPING_KINDS: Overlay['kind'][] = ['contact', 'agent', 'idea', 'laptop']
 
 export interface NearAction {
   id: string

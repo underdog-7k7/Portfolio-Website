@@ -1,6 +1,15 @@
 {
   "formEndpoint": "https://getform.io/f/f519e5d9-c4a3-41d6-af21-823790766777",
   "jokeApi": "https://v2.jokeapi.dev/joke/Programming,Pun?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&safe-mode",
+  "apis": {
+    "weather": "https://api.open-meteo.com/v1/forecast?latitude=17.385&longitude=78.4867&current=temperature_2m,weather_code,wind_speed_10m",
+    "radio": "https://de1.api.radio-browser.info/json/stations/search",
+    "issTle": "https://tle.ivanstanojevic.me/api/tle/25544",
+    "trivia": "https://opentdb.com/api.php?amount=5&category=18&type=multiple&encode=base64",
+    "github": "https://api.github.com/users/underdog-7k7/repos?sort=pushed&per_page=6",
+    "advice": "https://api.adviceslip.com/advice",
+    "deck": "https://deckofcardsapi.com/api/deck/new/draw/?count=9"
+  },
   "waypoints": [
     { "id": "hall-entrance", "label": "Entrance", "position": [0, 0, 7.5], "neighbors": ["hall-center"] },
     { "id": "hall-center", "label": "Hallway", "position": [0, 0, 4.5], "neighbors": ["hall-entrance", "hall-north", "living", "gallery"] },

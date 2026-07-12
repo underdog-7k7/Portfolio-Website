@@ -1,6 +1,6 @@
 {
   "headline": "What's on the bench right now",
-  "note": "This list changes often — it's whatever I'm genuinely building this month.",
+  "note": "This list changes often,it's whatever I'm genuinely building this month.",
   "items": [
     {
       "title": "VIVEK — RAG for the Garuda Purāṇa",
@@ -13,14 +13,14 @@
       "title": "AI Agent Twin for this house",
       "status": "In progress",
       "progress": 45,
-      "description": "A conversational AI version of me — it will live in the hallway robot and answer questions about my work from an external agent endpoint.",
+      "description": "A conversational AI version of me , it will live in the hallway robot and answer questions about my work from an external agent endpoint.",
       "tags": ["LLM Agents", "LangGraph", "TypeScript"]
     },
     {
-      "title": "Deep dive: LLM internals & MCP",
+      "title": "Deep dive: LLM internals",
       "status": "Ongoing",
       "progress": 70,
-      "description": "Transformer architecture, fine-tuning fundamentals and Model Context Protocol — sharpening the theory behind the systems I ship at work.",
+      "description": "Transformer architecture, fine-tuning fundamentals and Model Context Protocol , sharpening the theory behind the systems I ship at work.",
       "tags": ["Transformers", "MCP", "Fine-tuning"]
     }
   ]

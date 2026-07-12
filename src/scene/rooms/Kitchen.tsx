@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import { Text } from '@react-three/drei'
 import { Interactable } from '../../interactions/Interactable'
+import { WoodTag } from '../props/Signage'
 import {
   KitchenCounter,
   Fridge,
@@ -15,7 +15,9 @@ import {
   WallClock,
   FruitBowl,
   IdeaBoard,
+  CookieJar,
 } from '../props/props'
+import { ArcadeCabinet } from '../props/ArcadeCabinet'
 import { tileTexture } from '../textures'
 import profile from '../../data/profile.json'
 
@@ -65,31 +67,46 @@ export function Kitchen() {
       <Pantry position={[-10.6, 0, -3.2]} rotationY={0} />
       <Sideboard position={[10.6, 0, -4.5]} rotationY={Math.PI} />
 
-      {/* neon-ish kitchen slogan — in the gap between the cabinets and the shelf */}
-      <Text
-        position={[2.3, 2.5, -8.8]}
-        fontSize={0.22}
-        color="#ffb454"
-        anchorX="center"
-        anchorY="middle"
-        maxWidth={2.5}
-        textAlign="center"
+      {/* diner-corner arcade by the dining table — winner buys dessert */}
+      <Interactable
+        id="arcade-trivia"
+        position={[10.2, 0, -8.2]}
+        radius={2}
+        label="Play DEV·TRIVIA"
+        overlay={{ kind: 'trivia' }}
+        proximity={false}
+        markerY={2.15}
+        room="kitchen"
       >
-        Let's cook something together
-      </Text>
+        <ArcadeCabinet position={[0, 0, 0]} rotationY={-Math.PI / 4} />
+      </Interactable>
 
-      {/* the island is the contact "recipe card" station */}
+      {/* the island takes visitors' project "recipes" — the idea pitch station */}
       <Interactable
         id="contact-island"
         position={[-1.2, 0, -5.2]}
         radius={2.2}
-        label="Contact recipe card"
-        overlay={{ kind: 'contact' }}
+        label="Pitch me an idea"
+        overlay={{ kind: 'idea' }}
         markerY={1.7}
         room="kitchen"
       >
         <Island position={[0, 0, 0]} />
         <FruitBowl position={[-0.85, 1.05, -0.25]} />
+      </Interactable>
+
+      {/* fortune-cookie jar on the counter — crack one for an advice slip */}
+      <Interactable
+        id="fortune-cookies"
+        position={[0.3, 0, -8.3]}
+        radius={1.4}
+        label="Crack a fortune cookie"
+        overlay={{ kind: 'fortune' }}
+        proximity={false}
+        markerY={1.7}
+        room="kitchen"
+      >
+        <CookieJar position={[0, 0.98, -0.1]} />
       </Interactable>
 
       {/* fridge magnet = resume download (click / E) */}
@@ -99,33 +116,25 @@ export function Kitchen() {
         radius={1.9}
         label="Grab my resume off the fridge"
         overlay={{ kind: 'contact' }}
+        onActivate={() => window.open(resumeUrl, '_blank', 'noopener')}
         proximity={false}
         markerY={2.4}
       >
-        <group
-          onClick={(e) => {
-            e.stopPropagation()
-            window.open(resumeUrl, '_blank', 'noopener')
-          }}
-        >
-          <Fridge position={[0, 0, 0]} />
-        </group>
+        <Fridge position={[0, 0, 0]} />
       </Interactable>
 
-      {/* idea corkboard: visitors pitch their own "recipe" */}
+      {/* message corkboard: visitors pin a note straight to my inbox */}
       <Interactable
         id="idea-board"
         position={[5.8, 0, -8.5]}
         radius={2.3}
-        label="Pin your idea on the board"
-        overlay={{ kind: 'idea' }}
+        label="Drop me a message"
+        overlay={{ kind: 'contact' }}
         proximity={false}
-        markerY={2.75}
+        markerY={2.95}
       >
         <IdeaBoard position={[0, 1.85, -0.32]} rotationY={0} />
-        <Text position={[0, 2.65, -0.3]} fontSize={0.17} color="#ffb454" anchorX="center">
-          Got a recipe in mind? Pitch it!
-        </Text>
+        <WoodTag position={[0, 2.62, -0.3]} text="· drop me a message ·" />
       </Interactable>
     </group>
   )

@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
-import { Text } from '@react-three/drei'
 import { CanvasTexture, SRGBColorSpace } from 'three'
 import { Interactable } from '../../interactions/Interactable'
 import { WallArt } from '../props/props'
+import { NeonSign } from '../props/Signage'
 import current from '../../data/current.json'
 
 /** whiteboard texture generated straight from current.json — edit the JSON, the board updates */
@@ -219,9 +219,7 @@ export function Workshop() {
       </group>
 
       {/* neon room sign above the whiteboard */}
-      <Text position={[-8.3, 2.75, -4.72]} rotation-y={Math.PI} fontSize={0.24} color="#7df9ff" outlineWidth={0.008} outlineColor="#0a3a3f" anchorX="center">
-        THE LAB — work in progress
-      </Text>
+      <NeonSign position={[-8.3, 2.72, -4.72]} rotationY={Math.PI} text="THE LAB" sub="work in progress" />
 
       {/* stool + cardboard boxes */}
       <group position={[-9.4, 0, -6.3]}>
@@ -234,7 +232,7 @@ export function Workshop() {
           <meshStandardMaterial color="#57606f" metalness={0.5} />
         </mesh>
       </group>
-      <group position={[-6.8, 0, -8.4]}>
+      <group position={[-7.7, 0, -8.45]}>
         <mesh position={[0, 0.28, 0]}>
           <boxGeometry args={[0.85, 0.56, 0.8]} />
           <meshStandardMaterial color="#b08a5a" roughness={1} />

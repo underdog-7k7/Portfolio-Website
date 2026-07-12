@@ -188,6 +188,96 @@ export function codeScreenTexture(): CanvasTexture {
   })
 }
 
+/** laptop deck: amber-backlit keyboard well + trackpad, drawn top-down */
+export function laptopKeyboardTexture(): CanvasTexture {
+  return make('laptopKeys', 512, 344, (ctx, w, h) => {
+    const rand = rng(11)
+    // aluminium deck
+    const deck = ctx.createLinearGradient(0, 0, 0, h)
+    deck.addColorStop(0, '#28323d')
+    deck.addColorStop(1, '#1e2731')
+    ctx.fillStyle = deck
+    ctx.fillRect(0, 0, w, h)
+    // speaker grilles either side of the keyboard
+    ctx.fillStyle = 'rgba(255,255,255,0.07)'
+    for (let gy = 26; gy < 176; gy += 8) {
+      for (const gx of [8, 14, w - 10, w - 16]) ctx.fillRect(gx, gy, 2.5, 2.5)
+    }
+
+    // keyboard well with warm backlight bleeding through the key gaps
+    const kb = { x: 26, y: 16, w: w - 52, h: 182 }
+    const glow = ctx.createLinearGradient(0, kb.y, 0, kb.y + kb.h)
+    glow.addColorStop(0, '#4a3418')
+    glow.addColorStop(1, '#3a2a16')
+    ctx.fillStyle = glow
+    ctx.beginPath()
+    ctx.roundRect ? ctx.roundRect(kb.x - 4, kb.y - 4, kb.w + 8, kb.h + 8, 8) : ctx.rect(kb.x - 4, kb.y - 4, kb.w + 8, kb.h + 8)
+    ctx.fill()
+
+    const key = (kx: number, ky: number, kw: number, kh: number) => {
+      const g = ctx.createLinearGradient(0, ky, 0, ky + kh)
+      g.addColorStop(0, '#33424f')
+      g.addColorStop(1, '#26333e')
+      ctx.fillStyle = g
+      ctx.beginPath()
+      ctx.roundRect ? ctx.roundRect(kx, ky, kw, kh, 4) : ctx.rect(kx, ky, kw, kh)
+      ctx.fill()
+      // top highlight + faint glyph blob
+      ctx.fillStyle = 'rgba(255,255,255,0.08)'
+      ctx.fillRect(kx + 2, ky + 1.5, kw - 4, 2)
+      if (kh > 18 && rand() > 0.35) {
+        ctx.fillStyle = 'rgba(255,205,140,0.5)'
+        ctx.fillRect(kx + kw / 2 - 3, ky + kh / 2 - 3, 6, 5)
+      }
+    }
+
+    // five uniform rows + one bottom row with a spacebar
+    const gap = 4
+    const rows = [14, 14, 13, 12, 11]
+    let ky = kb.y
+    for (const n of rows) {
+      const kh = 28
+      const kw = (kb.w - (n - 1) * gap) / n
+      for (let i = 0; i < n; i++) key(kb.x + i * (kw + gap), ky, kw, kh)
+      ky += kh + gap
+    }
+    // bottom row: modifiers + spacebar + arrows
+    const bh = 26
+    const widths = [30, 30, 30, 158, 30, 30, 30, 30]
+    const totalW = widths.reduce((a, b) => a + b, 0) + gap * (widths.length - 1)
+    let bx = kb.x + (kb.w - totalW) / 2
+    for (const bwid of widths) {
+      key(bx, ky, bwid, bh)
+      bx += bwid + gap
+    }
+
+    // trackpad
+    const tp = { x: w / 2 - 78, y: 224, w: 156, h: 96 }
+    const tg = ctx.createLinearGradient(0, tp.y, 0, tp.y + tp.h)
+    tg.addColorStop(0, '#2c3945')
+    tg.addColorStop(1, '#25313c')
+    ctx.fillStyle = tg
+    ctx.beginPath()
+    ctx.roundRect ? ctx.roundRect(tp.x, tp.y, tp.w, tp.h, 8) : ctx.rect(tp.x, tp.y, tp.w, tp.h)
+    ctx.fill()
+    ctx.strokeStyle = 'rgba(255,255,255,0.1)'
+    ctx.lineWidth = 1.5
+    ctx.beginPath()
+    ctx.roundRect ? ctx.roundRect(tp.x, tp.y, tp.w, tp.h, 8) : ctx.rect(tp.x, tp.y, tp.w, tp.h)
+    ctx.stroke()
+    // power button, top-right of the deck
+    ctx.fillStyle = '#1c262f'
+    ctx.beginPath()
+    ctx.arc(w - 30, 204, 7, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.strokeStyle = 'rgba(120,220,160,0.8)'
+    ctx.lineWidth = 1.6
+    ctx.beginPath()
+    ctx.arc(w - 30, 204, 3.5, 0, Math.PI * 2)
+    ctx.stroke()
+  })
+}
+
 /** soft radial glow (moon halo, window moonbeam) */
 export function glowTexture(): CanvasTexture {
   return make('glow', 128, 128, (ctx, w) => {

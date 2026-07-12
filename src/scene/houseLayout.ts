@@ -71,7 +71,7 @@ const furniture: Array<[cx: number, cz: number, w: number, d: number]> = [
   [-10.6, 1.8, 0.55, 2.2], // bookshelf
   [-7.0, 0.65, 2.4, 0.9], // workstation desk
   [-5.0, 8.45, 1.8, 0.6], // tools cabinet
-  [-10.4, 8.3, 0.4, 0.4], // floor lamp
+  [-3.2, 8.2, 0.4, 0.4], // floor lamp (east corner, clear of the hologram)
   [2.1, 7.0, 0.5, 1.4], // hallway console
   [6.5, 7.6, 2.2, 1.0], // gallery desk
   [-2.5, -8.45, 7.0, 1.1], // kitchen counter
@@ -79,7 +79,10 @@ const furniture: Array<[cx: number, cz: number, w: number, d: number]> = [
   [6.5, 0.5, 3.0, 0.5], // gallery TV media console
   [-10.35, -6.8, 0.9, 2.4], // workshop bench
   [-9.4, -6.3, 0.4, 0.4], // workshop stool
-  [-6.8, -8.4, 0.95, 0.9], // workshop boxes
+  [-7.7, -8.45, 0.95, 0.9], // workshop boxes
+  [10.2, -8.2, 1.1, 1.1], // kitchen arcade cabinet (rotated — AABB covers it)
+  [-9.6, 7.2, 0.75, 0.75], // living-room holo projector pedestal
+  [-12.3, 2.7, 0.95, 0.95], // balcony card table
   [-1.2, -5.2, 2.4, 1.2], // kitchen island
   [6.5, -4.5, 2.2, 2.2], // dining table
   [-14.3, 3.2, 0.5, 0.5], // telescope

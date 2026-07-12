@@ -1,7 +1,7 @@
 import { useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
-import type { Group } from 'three'
-import { codeScreenTexture, wallArtTexture } from '../textures'
+import type { CanvasTexture, Group } from 'three'
+import { codeScreenTexture, laptopKeyboardTexture, wallArtTexture } from '../textures'
 
 /**
  * Procedural low-poly furniture. Every prop is built from primitives so the
@@ -60,28 +60,107 @@ export function CoffeeTable({ position }: { position: XYZ }) {
 }
 
 export function Bookshelf({ position, rotationY = 0 }: { position: XYZ; rotationY?: number }) {
-  const bookColors = ['#c0392b', '#2980b9', '#27ae60', '#f39c12', '#8e44ad', '#16a085', '#d35400']
+  // deterministic book generator: varied heights, thickness, colors + a leaner per shelf
+  const shelves = useMemo(() => {
+    const palette = ['#c0392b', '#2980b9', '#27ae60', '#f39c12', '#8e44ad', '#16a085', '#d35400', '#7a8a5a', '#31435c', '#b3592f']
+    let seed = 13
+    const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647
+    return [0.62, 1.18, 1.74].map((shelfY, si) => {
+      const books: Array<{ z: number; h: number; t: number; c: string; lean: number }> = []
+      let z = -0.92
+      while (z < 0.55 - 0.12) {
+        const t = 0.05 + rnd() * 0.06
+        books.push({
+          z: z + t / 2,
+          h: 0.26 + rnd() * 0.16,
+          t,
+          c: palette[Math.floor(rnd() * palette.length)],
+          lean: books.length === 4 + si ? 0.16 : 0,
+        })
+        z += t + 0.006
+      }
+      // horizontal stack at the right end of each shelf
+      const stack = [0, 1, 2].slice(0, 2 + (si % 2)).map((i) => ({
+        y: 0.035 + i * 0.055,
+        c: palette[(si * 3 + i * 2) % palette.length],
+        w: 0.34 - i * 0.04,
+      }))
+      return { shelfY, books, stack }
+    })
+  }, [])
   return (
     <group position={position} rotation-y={rotationY}>
-      <mesh position={[0, 1.1, 0]}>
-        <boxGeometry args={[0.5, 2.2, 2.1]} />
-        <meshStandardMaterial color="#5a4130" roughness={0.8} />
+      {/* back panel + sides + top/plinth */}
+      <mesh position={[-0.19, 1.15, 0]}>
+        <boxGeometry args={[0.06, 2.3, 2.1]} />
+        <meshStandardMaterial color="#43301f" roughness={0.85} />
       </mesh>
-      {[0.45, 1.05, 1.65].map((y) => (
-        <group key={y}>
-          {bookColors.map((c, i) => (
-            <mesh key={i} position={[0.18, y, -0.85 + i * 0.28]}>
-              <boxGeometry args={[0.16, 0.34 + (i % 3) * 0.04, 0.09]} />
-              <meshStandardMaterial color={c} roughness={1} />
+      {[-1.03, 1.03].map((z) => (
+        <mesh key={z} position={[0, 1.15, z]}>
+          <boxGeometry args={[0.46, 2.3, 0.06]} />
+          <meshStandardMaterial color="#5a4130" roughness={0.75} />
+        </mesh>
+      ))}
+      <mesh position={[0, 2.28, 0]}>
+        <boxGeometry args={[0.5, 0.07, 2.16]} />
+        <meshStandardMaterial color="#5a4130" roughness={0.75} />
+      </mesh>
+      <mesh position={[0, 0.07, 0]}>
+        <boxGeometry args={[0.48, 0.14, 2.12]} />
+        <meshStandardMaterial color="#4a3524" roughness={0.75} />
+      </mesh>
+      {/* shelf boards */}
+      {[0.6, 1.16, 1.72].map((y) => (
+        <mesh key={y} position={[0, y, 0]}>
+          <boxGeometry args={[0.44, 0.045, 2.0]} />
+          <meshStandardMaterial color="#6b4f33" roughness={0.7} />
+        </mesh>
+      ))}
+      {/* books */}
+      {shelves.map(({ shelfY, books, stack }, si) => (
+        <group key={si} position={[0.04, shelfY + 0.025, 0]}>
+          {books.map((b, i) => (
+            <mesh key={i} position={[0, b.h / 2 + (b.lean ? -0.01 : 0), b.z]} rotation-x={b.lean}>
+              <boxGeometry args={[0.24, b.h, b.t]} />
+              <meshStandardMaterial color={b.c} roughness={1} />
+            </mesh>
+          ))}
+          {/* lying stack */}
+          {stack.map((s, i) => (
+            <mesh key={i} position={[0, s.y, 0.78]} rotation-y={0.06 * i}>
+              <boxGeometry args={[0.26, 0.05, s.w]} />
+              <meshStandardMaterial color={s.c} roughness={1} />
             </mesh>
           ))}
         </group>
       ))}
+      {/* top-shelf decor: little plant + trophy */}
+      <group position={[0.02, 2.315, -0.6]}>
+        <mesh position={[0, 0.07, 0]}>
+          <cylinderGeometry args={[0.07, 0.055, 0.14, 10]} />
+          <meshStandardMaterial color="#b35a3a" roughness={0.9} />
+        </mesh>
+        <mesh position={[0, 0.22, 0]}>
+          <sphereGeometry args={[0.11, 10, 10]} />
+          <meshStandardMaterial color="#3d7a3d" roughness={1} flatShading />
+        </mesh>
+      </group>
+      <group position={[0.02, 2.315, 0.55]}>
+        <mesh position={[0, 0.04, 0]}>
+          <cylinderGeometry args={[0.05, 0.065, 0.08, 10]} />
+          <meshStandardMaterial color="#8a6d2f" metalness={0.5} roughness={0.4} />
+        </mesh>
+        <mesh position={[0, 0.14, 0]}>
+          <sphereGeometry args={[0.055, 10, 8, 0, Math.PI * 2, 0, Math.PI * 0.6]} />
+          <meshStandardMaterial color="#c8a248" metalness={0.6} roughness={0.35} />
+        </mesh>
+      </group>
     </group>
   )
 }
 
-export function Workstation({ position, rotationY = 0 }: { position: XYZ; rotationY?: number }) {
+export function Workstation({ position, rotationY = 0, screen }: { position: XYZ; rotationY?: number; screen?: CanvasTexture }) {
+  const fallback = useMemo(() => codeScreenTexture(), [])
   return (
     <group position={position} rotation-y={rotationY}>
       <mesh position={[0, 0.72, 0]}>
@@ -94,14 +173,14 @@ export function Workstation({ position, rotationY = 0 }: { position: XYZ; rotati
           <meshStandardMaterial color="#3a2a1c" />
         </mesh>
       ))}
-      {/* big screen with code on it */}
+      {/* big screen — shows code, or whatever texture the room wires in */}
       <mesh position={[0, 1.25, -0.18]}>
         <boxGeometry args={[1.5, 0.85, 0.06]} />
         <meshStandardMaterial color="#1a2230" roughness={0.4} />
       </mesh>
       <mesh position={[0, 1.25, -0.145]}>
         <planeGeometry args={[1.4, 0.76]} />
-        <meshBasicMaterial map={useMemo(() => codeScreenTexture(), [])} toneMapped={false} />
+        <meshBasicMaterial map={screen ?? fallback} toneMapped={false} />
       </mesh>
       <mesh position={[0, 0.78, -0.1]}>
         <boxGeometry args={[0.5, 0.05, 0.25]} />
@@ -211,16 +290,17 @@ export function GalleryDesk({ position }: { position: XYZ }) {
 /** open laptop — clicking it zooms the camera in and boots the "desktop" */
 export function Laptop({ position, rotationY = 0 }: { position: XYZ; rotationY?: number }) {
   const screen = useMemo(() => codeScreenTexture(), [])
+  const deck = useMemo(() => laptopKeyboardTexture(), [])
   return (
     <group position={position} rotation-y={rotationY}>
       <mesh position={[0, 0.015, 0.05]}>
         <boxGeometry args={[0.58, 0.03, 0.4]} />
         <meshStandardMaterial color="#2c3e50" metalness={0.4} roughness={0.4} />
       </mesh>
-      {/* keyboard hint */}
-      <mesh position={[0, 0.032, 0.08]}>
-        <planeGeometry args={[0.5, 0.24]} />
-        <meshStandardMaterial color="#22303e" roughness={0.6} />
+      {/* backlit keyboard + trackpad deck, lying flat on the base */}
+      <mesh position={[0, 0.0315, 0.055]} rotation-x={-Math.PI / 2}>
+        <planeGeometry args={[0.55, 0.37]} />
+        <meshBasicMaterial map={deck} toneMapped={false} />
       </mesh>
       <group position={[0, 0.17, -0.12]} rotation-x={-0.32}>
         <mesh>
@@ -230,6 +310,11 @@ export function Laptop({ position, rotationY = 0 }: { position: XYZ; rotationY?:
         <mesh position={[0, 0, 0.012]}>
           <planeGeometry args={[0.53, 0.33]} />
           <meshBasicMaterial map={screen} toneMapped={false} />
+        </mesh>
+        {/* webcam dot in the bezel */}
+        <mesh position={[0, 0.178, 0.013]}>
+          <circleGeometry args={[0.005, 8]} />
+          <meshBasicMaterial color="#0a0e14" />
         </mesh>
       </group>
     </group>
@@ -404,20 +489,86 @@ export function Telescope({ position, rotationY = 0 }: { position: XYZ; rotation
 export function LoungeChair({ position, rotationY = 0 }: { position: XYZ; rotationY?: number }) {
   return (
     <group position={position} rotation-y={rotationY}>
-      <mesh position={[0, 0.32, 0.25]} rotation-x={0.15}>
-        <boxGeometry args={[0.75, 0.12, 1.1]} />
-        <meshStandardMaterial color="#3a7ca5" roughness={1} />
-      </mesh>
-      <mesh position={[0, 0.62, -0.45]} rotation-x={-0.7}>
-        <boxGeometry args={[0.75, 0.12, 0.8]} />
-        <meshStandardMaterial color="#3a7ca5" roughness={1} />
-      </mesh>
-      {([[-0.32, 0.7], [0.32, 0.7], [-0.32, -0.2], [0.32, -0.2]] as const).map(([x, z], i) => (
-        <mesh key={i} position={[x, 0.14, z]}>
-          <boxGeometry args={[0.06, 0.28, 0.06]} />
-          <meshStandardMaterial color="#8b7355" />
-        </mesh>
+      {/* wooden side rails + legs */}
+      {[-0.4, 0.4].map((x) => (
+        <group key={x} position={[x, 0, 0]}>
+          <mesh position={[0, 0.42, 0.1]}>
+            <boxGeometry args={[0.07, 0.06, 1.3]} />
+            <meshStandardMaterial color="#8b7355" roughness={0.7} />
+          </mesh>
+          {[0.6, -0.42].map((z) => (
+            <mesh key={z} position={[0, 0.2, z]}>
+              <boxGeometry args={[0.06, 0.4, 0.06]} />
+              <meshStandardMaterial color="#7a6248" roughness={0.7} />
+            </mesh>
+          ))}
+        </group>
       ))}
+      {/* seat cushion */}
+      <mesh position={[0, 0.36, 0.22]} rotation-x={0.05}>
+        <boxGeometry args={[0.72, 0.13, 0.85]} />
+        <meshStandardMaterial color="#3a7ca5" roughness={1} />
+      </mesh>
+      {/* backrest, hinged at the rear of the seat and leaning back */}
+      <group position={[0, 0.38, -0.2]} rotation-x={-0.4}>
+        <mesh position={[0, 0.33, -0.02]}>
+          <boxGeometry args={[0.72, 0.72, 0.13]} />
+          <meshStandardMaterial color="#3a7ca5" roughness={1} />
+        </mesh>
+        {/* head pillow */}
+        <mesh position={[0, 0.56, 0.07]}>
+          <boxGeometry args={[0.48, 0.2, 0.09]} />
+          <meshStandardMaterial color="#5b9bc4" roughness={1} />
+        </mesh>
+      </group>
+    </group>
+  )
+}
+
+/** green-felt bistro card table — fanned cards + a deck, ready for a trick */
+export function CardTable({ position, rotationY = 0 }: { position: XYZ; rotationY?: number }) {
+  return (
+    <group position={position} rotation-y={rotationY}>
+      {/* felt top + wooden rim */}
+      <mesh position={[0, 0.62, 0]}>
+        <cylinderGeometry args={[0.42, 0.42, 0.045, 22]} />
+        <meshStandardMaterial color="#2a5c47" roughness={1} />
+      </mesh>
+      <mesh position={[0, 0.615, 0]}>
+        <cylinderGeometry args={[0.445, 0.445, 0.03, 22]} />
+        <meshStandardMaterial color="#4a3524" roughness={0.6} />
+      </mesh>
+      {/* pedestal + base */}
+      <mesh position={[0, 0.32, 0]}>
+        <cylinderGeometry args={[0.05, 0.07, 0.6, 10]} />
+        <meshStandardMaterial color="#3a2a1c" />
+      </mesh>
+      <mesh position={[0, 0.03, 0]}>
+        <cylinderGeometry args={[0.24, 0.28, 0.05, 16]} />
+        <meshStandardMaterial color="#3a2a1c" />
+      </mesh>
+      {/* five cards fanned on the felt */}
+      {[-0.5, -0.25, 0, 0.25, 0.5].map((a, i) => (
+        <group key={i} position={[Math.sin(a) * 0.17, 0.6455 + i * 0.0012, 0.06]} rotation={[-Math.PI / 2, 0, -a]}>
+          <mesh>
+            <planeGeometry args={[0.12, 0.17]} />
+            <meshStandardMaterial color="#f5f2ea" roughness={0.6} />
+          </mesh>
+          <mesh position={[0, 0, 0.001]}>
+            <planeGeometry args={[0.045, 0.06]} />
+            <meshStandardMaterial color={i % 2 ? '#2c3e50' : '#c0392b'} roughness={0.6} />
+          </mesh>
+        </group>
+      ))}
+      {/* the rest of the deck */}
+      <mesh position={[0.2, 0.665, -0.15]} rotation-y={0.4}>
+        <boxGeometry args={[0.13, 0.04, 0.18]} />
+        <meshStandardMaterial color="#7a2e1f" roughness={0.5} />
+      </mesh>
+      <mesh position={[0.2, 0.686, -0.15]} rotation={[-Math.PI / 2, 0, -0.4]}>
+        <planeGeometry args={[0.12, 0.17]} />
+        <meshStandardMaterial color="#f5f2ea" roughness={0.6} />
+      </mesh>
     </group>
   )
 }
@@ -804,6 +955,35 @@ export function WallClock({ position, rotationY = 0 }: { position: XYZ; rotation
   )
 }
 
+/** glass fortune-cookie jar for the kitchen counter */
+export function CookieJar({ position }: { position: XYZ }) {
+  return (
+    <group position={position}>
+      {/* glass */}
+      <mesh position={[0, 0.09, 0]}>
+        <cylinderGeometry args={[0.09, 0.085, 0.18, 14, 1, true]} />
+        <meshStandardMaterial color="#cfe3ea" transparent opacity={0.28} roughness={0.1} side={2} />
+      </mesh>
+      {/* cookies inside */}
+      {([[-0.02, 0.05, 0.01], [0.03, 0.045, -0.02], [0, 0.1, 0.02], [-0.03, 0.1, -0.015]] as const).map(([x, y, z], i) => (
+        <mesh key={i} position={[x, y, z]} rotation={[0.4 * i, i, 0.2]}>
+          <sphereGeometry args={[0.034, 8, 6]} />
+          <meshStandardMaterial color="#c9963f" roughness={1} flatShading />
+        </mesh>
+      ))}
+      {/* lid */}
+      <mesh position={[0, 0.19, 0]}>
+        <cylinderGeometry args={[0.095, 0.095, 0.025, 14]} />
+        <meshStandardMaterial color="#8a6d4a" roughness={0.6} />
+      </mesh>
+      <mesh position={[0, 0.213, 0]}>
+        <sphereGeometry args={[0.018, 8, 8]} />
+        <meshStandardMaterial color="#5a4130" />
+      </mesh>
+    </group>
+  )
+}
+
 /** fruit bowl for the island counter */
 export function FruitBowl({ position }: { position: XYZ }) {
   return (
@@ -822,7 +1002,7 @@ export function FruitBowl({ position }: { position: XYZ }) {
   )
 }
 
-/** corkboard where visitors pin their collaboration ideas */
+/** corkboard where visitors drop me their messages */
 export function IdeaBoard({ position, rotationY = 0 }: { position: XYZ; rotationY?: number }) {
   const notes: Array<[number, number, number, string]> = [
     [-0.6, 0.25, -0.06, '#fff8b8'],
@@ -850,6 +1030,13 @@ export function IdeaBoard({ position, rotationY = 0 }: { position: XYZ; rotation
             <sphereGeometry args={[0.02, 8, 8]} />
             <meshStandardMaterial color="#c0392b" />
           </mesh>
+          {/* scribbled message lines so the notes read as written */}
+          {[0.05, -0.02, -0.09].map((ly, j) => (
+            <mesh key={j} position={[j === 2 ? -0.045 : 0, ly, 0.005]}>
+              <planeGeometry args={[j === 2 ? 0.15 : 0.24, 0.014]} />
+              <meshBasicMaterial color="#54503c" />
+            </mesh>
+          ))}
         </group>
       ))}
     </group>

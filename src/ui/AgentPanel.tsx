@@ -33,9 +33,9 @@ export function AgentPanel({ Panel }: { Panel: PanelComponent }) {
   }
 
   return (
-    <Panel title="My AI Persona">
-      <p className="mb-3 rounded-lg bg-amberish/10 px-3 py-1.5 text-[11px] text-amberish/90">
-        AI agent integration coming soon — for now I run on good intentions and canned answers.
+    <Panel title="This 'thing' represents my AI Persona">
+      <p className="mb-3 rounded-lg bg-amberish/85 px-3 py-1.5 text-[11px] text-amberish/200">
+        AI agent integration coming soon, I need a Backend for that, will be done sooon....
       </p>
       <div ref={scroller} className="mb-3 flex max-h-56 min-h-[10rem] flex-col gap-2 overflow-y-auto pr-1">
         {messages.map((m, i) => (
@@ -50,7 +50,7 @@ export function AgentPanel({ Panel }: { Panel: PanelComponent }) {
         ))}
         {thinking && (
           <div className="max-w-[85%] animate-pulse self-start rounded-2xl rounded-bl-sm bg-cream/10 px-3 py-2 text-sm text-cream/50">
-            thinking…
+            pretending to think..
           </div>
         )}
       </div>
@@ -59,7 +59,7 @@ export function AgentPanel({ Panel }: { Panel: PanelComponent }) {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Say hi…"
-          className="min-w-0 flex-1 rounded-full border border-cream/20 bg-cream/5 px-4 py-2 text-sm text-cream placeholder-cream/35 outline-none focus:border-amberish"
+          className="min-w-0 flex-1 rounded-full border border-cream/800 bg-cream/5 px-4 py-2 text-sm text-cream placeholder-cream/35 outline-none focus:border-amberish"
         />
         <button
           type="submit"
