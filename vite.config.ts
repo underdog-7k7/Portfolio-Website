@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 // (https://<user>.github.io/<repo>/). Change it here if the repo is renamed.
 export default defineConfig({
   plugins: [react()],
-  base: '/Portfolio/',
+  base: '/Portfolio-Website/',
   build: {
     chunkSizeWarningLimit: 1200,
   },
