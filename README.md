@@ -1,4 +1,4 @@
-# 🏠 Animesh Pandey — 3D Portfolio House
+# A 3-D Themed Portfolio
 
 My portfolio is a house you can walk through. Built with React Three Fiber, it runs
 entirely in the browser and deploys as a static site to GitHub Pages.
