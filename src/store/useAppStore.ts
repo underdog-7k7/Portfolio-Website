@@ -56,6 +56,8 @@ export interface FocusTarget {
 interface AppState {
   /** user pressed "Step Inside" after assets loaded */
   started: boolean
+  /** user asked to enter the 3D house — mounts the Canvas and starts loading its assets */
+  loadingRequested: boolean
   isTouch: boolean
   overlay: Overlay | null
   /** interactable id that opened the current overlay (for auto-close on walk-away) */
@@ -73,10 +75,12 @@ interface AppState {
   setRoom: (r: string) => void
   setFocus: (f: FocusTarget | null) => void
   setCameraBusy: (v: boolean) => void
+  requestLoading: () => void
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
   started: false,
+  loadingRequested: false,
   isTouch: false,
   overlay: null,
   overlaySource: null,
@@ -85,6 +89,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   focus: null,
   cameraBusy: false,
   start: () => set({ started: true }),
+  requestLoading: () => set({ loadingRequested: true }),
   setTouch: (v) => set({ isTouch: v }),
   openOverlay: (o, source) => {
     set({ overlay: o, overlaySource: source ?? null })
