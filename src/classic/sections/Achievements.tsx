@@ -20,7 +20,7 @@ function CertCard({ cert, isTouch }: { cert: { name: string; year: string }; isT
 
 export function Achievements({ theme, isTouch }: { theme: ClassicTheme; isTouch: boolean }) {
   const { ref, inView } = useReveal<HTMLDivElement>()
-  const kicker = theme === 'dark' ? '$ ls ~/certs' : 'Exhibit C: Certifications'
+  const kicker = theme === 'dark' ? '$ ls ~/recent_developments' : 'Exhibit C: Certifications And Achievements'
 
   return (
     <section className="section" id="achievements">

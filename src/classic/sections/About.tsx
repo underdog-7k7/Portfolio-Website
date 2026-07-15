@@ -19,7 +19,7 @@ export function About({ theme }: { theme: ClassicTheme }) {
     <section className="section" id="about">
       <div ref={ref} className={`section-inner reveal ${inView ? 'in-view' : ''}`}>
         <p className="kicker">{kicker}</p>
-        <h2 className="h-section">Who am I</h2>
+        <h2 className="h-section">Who am I and what do I strive to build?</h2>
 
         <div className="about-row">
           <Photo />

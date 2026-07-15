@@ -351,7 +351,12 @@
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
-  animation: classic-spin 9s linear infinite;
+  cursor: grab;
+  touch-action: none;
+}
+
+.cube3d.is-dragging {
+  cursor: grabbing;
 }
 
 .cube3d-face {
@@ -367,18 +372,6 @@
 .cube3d-face--left { transform: rotateY(-90deg) translateZ(38px); }
 .cube3d-face--top { transform: rotateX(90deg) translateZ(38px); }
 .cube3d-face--bottom { transform: rotateX(-90deg) translateZ(38px); }
-
-@keyframes classic-spin {
-  from { transform: rotateX(-18deg) rotateY(0deg); }
-  to { transform: rotateX(-18deg) rotateY(360deg); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .cube3d {
-    animation: none;
-    transform: rotateX(-18deg) rotateY(28deg);
-  }
-}
 
 /* ---------- terminal scanline atmosphere (dark only) ---------- */
 .classic-shell[data-theme='dark'] .scanlines {
